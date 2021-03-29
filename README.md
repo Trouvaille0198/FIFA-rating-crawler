@@ -16,7 +16,7 @@
     
     或
     
-    //a[@class='display-block padding-0']
+    //a[@class='display-block padding-0']/@href
     
 - 球员资料
   - 头像地址 url
@@ -26,7 +26,8 @@
       //div[@class='row']//div[@class='playercard-position']/text()
       
     - rating
-      //div[@class='row']//div[@class='playercard-rating']/text()
+      //div[@class='player-cards']//div[contains(@class,'playercard  fut21 card-large  nif') and @style=' ']//div[@class='playercard-rating']/text()
+      
       
     - PACE
       
