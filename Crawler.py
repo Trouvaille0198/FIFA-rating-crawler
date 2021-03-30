@@ -12,7 +12,7 @@ class RatingCrawler():
         self.column = [
             'Name', 'Club', 'League', 'Nation', 'Age', 'Height', 'Position',
             'Rating', 'PACE', 'SHOOTING', 'PASSING', 'DRIBBLING', 'DEFENCE',
-            'PHYSICAL', 'Picture'
+            'PHYSICAL'
         ]
 
         if path != '':
@@ -46,12 +46,18 @@ class RatingCrawler():
         :param text: 文本
         :return: xpath对象
         """
-        html = etree.HTML(text)
-        return html
+        if text:
+            html = etree.HTML(text)
+            return html
+        else:
+            return None
 
-    def is_null(self, feature):
+    def null_manage(self, feature: str) -> int:
         '''
-        判断空特征
+        判断并处理空数据，最后转化为整型数
+
+        :param feature: 文本
+        :return: 整型数
         '''
         if feature:
             return int(feature[0])
@@ -82,14 +88,17 @@ class RatingCrawler():
         else:
             url = 'https://www.futhead.com/21/players/?sort=-rating&level=all_nif&page={}&bin_platform=pc'.format(
                 page)
-        html = self.switch2xpath(self.get_url_text(url))  # 获取排名页面的xpath对象
-        url_list = html.xpath("//a[@class='display-block padding-0']/@href")
-        url_list_completed = []
-        # 补全url
-        for url in url_list:
-            url = r'https://www.futhead.com' + url
-            url_list_completed.append(url)
-        return url_list_completed
+        try:
+            html = self.switch2xpath(self.get_url_text(url))  # 获取排名页面的xpath对象
+            url_list = html.xpath("//a[@class='display-block padding-0']/@href")
+            url_list_completed = []
+            # 补全url
+            for url in url_list:
+                url = r'https://www.futhead.com' + url
+                url_list_completed.append(url)
+            return url_list_completed
+        except:
+            return []
 
     def get_whole_player_url(self, page: int, reverse_page=0) -> list:
         """
@@ -116,95 +125,98 @@ class RatingCrawler():
         :param url: 球员详细页url
         :return: 球员信息列表
         """
-        # 构建xpath对象
-        player = self.switch2xpath(self.get_url_text(url))
-        one_piece = []
-        # 全名
-        full_name = player.xpath(
-            "//ul[@class='list-group margin-b-8']//div[@class='font-16 fh-red']/a/text()"
-        )[0]
-        # 俱乐部
-        club = player.xpath(
-            "//ul[@class='list-group margin-b-8']//div[@class='row player-sidebar-item']//a[@class='futhead-link']/text()"
-        )[0]
-        # 联赛
-        league = player.xpath(
-            "//ul[@class='list-group margin-b-8']//div[@class='row player-sidebar-item']//a[@class='futhead-link']/text()"
-        )[1]
-        # 国籍
-        nation = player.xpath(
-            "//ul[@class='list-group margin-b-8']//div[@class='row player-sidebar-item']//a[@class='futhead-link']/text()"
-        )[2]
-        # 年龄
-        age = player.xpath(
-            "//div[@class='col-xs-7' and text()='Age']/../div[@class='col-xs-5 player-sidebar-value']/text()"
-        )[0].split(' ', 1)[0]
-        age = int(self.delete_nonwords(age))
-        # 身高
-        height = player.xpath(
-            "//div[@class='col-xs-7' and text()='Height']/../div[@class='col-xs-5 player-sidebar-value']/text()"
-        )[0].split('c', 1)[0]
-        height = int(self.delete_nonwords(height))
-        # 位置
-        position = player.xpath(
-            "//div[@class='row']//div[@class='playercard-position']/text()")[0]
-        position = self.delete_nonwords(position)
-        # 综合能力
-        rating = player.xpath(
-            "//div[@class='player-cards']//div[contains(@class,'playercard  fut21 card-large  nif') and @style=' ']//div[@class='playercard-rating']/text()"
-        )[0]
-        rating = int(self.delete_nonwords(rating))
-        # 速度
-        pace = player.xpath(
-            "//div[@class='row']//div[@class='playercard-attr playercard-attr1']/span[@class='chembot-value']/text()"
-        )
-        pace = self.is_null(pace)
-        # 射门
-        shooting = player.xpath(
-            "//div[@class='row']//div[@class='playercard-attr playercard-attr2']/span[@class='chembot-value']/text()"
-        )[0]
-        shooting = int(shooting)
-        # 传球
-        passing = player.xpath(
-            "//div[@class='row']//div[@class='playercard-attr playercard-attr3']/span[@class='chembot-value']/text()"
-        )[0]
-        passing = int(passing)
-        # 过人
-        dribbling = player.xpath(
-            " //div[@class='row']//div[@class='playercard-attr playercard-attr4']/span[@class='chembot-value']/text()"
-        )[0]
-        dribbling = int(dribbling)
-        # 防守
-        defence = player.xpath(
-            "//div[@class='row']//div[@class='playercard-attr playercard-attr5']/span[@class='chembot-value']/text()"
-        )[0]
-        defence = int(defence)
-        # 体能
-        physical = player.xpath(
-            "//div[@class='row']//div[@class='playercard-attr playercard-attr6']/span[@class='chembot-value']/text()"
-        )[0]
-        physical = int(physical)
-        # 头像地址
-        picture = player.xpath(
-            "//div[@class='row']//div[@class='playercard-picture']/img/@src"
-        )[0]
-        one_piece.append(full_name)
-        one_piece.append(club)
-        one_piece.append(league)
-        one_piece.append(nation)
-        one_piece.append(age)
-        one_piece.append(height)
-        one_piece.append(position)
-        one_piece.append(rating)
-        one_piece.append(pace)
-        one_piece.append(shooting)
-        one_piece.append(passing)
-        one_piece.append(dribbling)
-        one_piece.append(defence)
-        one_piece.append(physical)
-        # one_piece.append(picture)
+        try:
+            # 构建xpath对象
+            player = self.switch2xpath(self.get_url_text(url))
+            one_piece = []
+            # 全名
+            full_name = player.xpath(
+                "//ul[@class='list-group margin-b-8']//div[@class='font-16 fh-red']/a/text()"
+            )[0]
+            # 俱乐部
+            club = player.xpath(
+                "//ul[@class='list-group margin-b-8']//div[@class='row player-sidebar-item']//a[@class='futhead-link']/text()"
+            )[0]
+            # 联赛
+            league = player.xpath(
+                "//ul[@class='list-group margin-b-8']//div[@class='row player-sidebar-item']//a[@class='futhead-link']/text()"
+            )[1]
+            # 国籍
+            nation = player.xpath(
+                "//ul[@class='list-group margin-b-8']//div[@class='row player-sidebar-item']//a[@class='futhead-link']/text()"
+            )[2]
+            # 年龄
+            age = player.xpath(
+                "//div[@class='col-xs-7' and text()='Age']/../div[@class='col-xs-5 player-sidebar-value']/text()"
+            )[0].split(' ', 1)[0]
+            age = int(self.delete_nonwords(age))
+            # 身高
+            height = player.xpath(
+                "//div[@class='col-xs-7' and text()='Height']/../div[@class='col-xs-5 player-sidebar-value']/text()"
+            )[0].split('c', 1)[0]
+            height = int(self.delete_nonwords(height))
+            # 位置
+            position = player.xpath(
+                "//div[@class='row']//div[@class='playercard-position']/text()")[0]
+            position = self.delete_nonwords(position)
+            # 综合能力
+            rating = player.xpath(
+                "//div[@class='player-cards']//div[contains(@class,'playercard  fut21 card-large  nif') and @style=' ']//div[@class='playercard-rating']/text()"
+            )[0]
+            rating = int(self.delete_nonwords(rating))
+            # 速度
+            pace = player.xpath(
+                "//div[@class='row']//div[@class='playercard-attr playercard-attr1']/span[@class='chembot-value']/text()"
+            )
+            pace = self.null_manage(pace)
+            # 射门
+            shooting = player.xpath(
+                "//div[@class='row']//div[@class='playercard-attr playercard-attr2']/span[@class='chembot-value']/text()"
+            )
+            shooting = self.null_manage(shooting)
+            # 传球
+            passing = player.xpath(
+                "//div[@class='row']//div[@class='playercard-attr playercard-attr3']/span[@class='chembot-value']/text()"
+            )
+            passing = self.null_manage(passing)
+            # 过人
+            dribbling = player.xpath(
+                " //div[@class='row']//div[@class='playercard-attr playercard-attr4']/span[@class='chembot-value']/text()"
+            )
+            dribbling = self.null_manage(dribbling)
+            # 防守
+            defence = player.xpath(
+                "//div[@class='row']//div[@class='playercard-attr playercard-attr5']/span[@class='chembot-value']/text()"
+            )
+            defence = self.null_manage(defence)
+            # 体能
+            physical = player.xpath(
+                "//div[@class='row']//div[@class='playercard-attr playercard-attr6']/span[@class='chembot-value']/text()"
+            )
+            physical = self.null_manage(physical)
+            # 头像地址
+            picture = player.xpath(
+                "//div[@class='row']//div[@class='playercard-picture']/img/@src"
+            )[0]
+            one_piece.append(full_name)
+            one_piece.append(club)
+            one_piece.append(league)
+            one_piece.append(nation)
+            one_piece.append(age)
+            one_piece.append(height)
+            one_piece.append(position)
+            one_piece.append(rating)
+            one_piece.append(pace)
+            one_piece.append(shooting)
+            one_piece.append(passing)
+            one_piece.append(dribbling)
+            one_piece.append(defence)
+            one_piece.append(physical)
+            # one_piece.append(picture)
 
-        return one_piece
+            return one_piece
+        except:
+            return []
 
     def get_player_infos(self, url_list: list) -> list:
         """TODO
@@ -249,7 +261,7 @@ class RatingCrawler():
         """
         集成功能函数
         """
-        player_url_list = self.get_whole_player_url(1)
+        player_url_list = self.get_whole_player_url(200)
         info_list = self.get_player_infos(player_url_list)
         df = self.switch2df(info_list)
         self.save_to_path(df)
