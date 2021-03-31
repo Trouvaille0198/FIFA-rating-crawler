@@ -261,7 +261,7 @@ class RatingCrawler():
         """
         集成功能函数
         """
-        player_url_list = self.get_whole_player_url(200)
+        player_url_list = self.get_whole_player_url(208, 135)
         info_list = self.get_player_infos(player_url_list)
         df = self.switch2df(info_list)
         self.save_to_path(df)
