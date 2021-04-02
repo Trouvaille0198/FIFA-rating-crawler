@@ -11,7 +11,7 @@ import time
 class RatingCrawler():
     def __init__(self, path=''):
         self.column = [
-            'Name', 'Club', 'League', 'Nation', 'Age', 'Height', 'Position',
+            'Name', 'Nation', 'Position', 'Age', 'Birth', 'Height', 'Weight',
             'Rating', 'PACE', 'SHOOTING', 'PASSING', 'DRIBBLING', 'DEFENCE',
             'PHYSICAL'
         ]
@@ -53,6 +53,8 @@ class RatingCrawler():
         else:
             return None
 
+    def
+
     def null_manage(self, feature: str) -> int:
         '''
         判断并处理空数据，最后转化为整型数
@@ -90,7 +92,7 @@ class RatingCrawler():
             url_list_completed = []
             # 补全url
             for url in url_list:
-                url = r'https://sofifa.com'+url+r'?hl=en-US'
+                url = r'https://sofifa.com' + url + r'?hl=en-US'
                 url_list_completed.append(url)
             return url_list_completed
         except:
@@ -105,7 +107,7 @@ class RatingCrawler():
         """
         url_list = []
         count = 1
-        for i in range(0, page*60, 60):
+        for i in range(0, page * 60, 60):
             print('正在获取第{}页球员列表'.format(str(count)))
             count += 1
             url = "https://sofifa.com/players?type=all&pn%5B0%5D=27&pn%5B1%5D=25&pn%5B2%5D=23&pn%5B3%5D=22&pn%5B4%5D=21&pn%5B5%5D=20&pn%5B6%5D=18&pn%5B7%5D=16&pn%5B8%5D=14&pn%5B9%5D=12&pn%5B10%5D=10&pn%5B11%5D=8&pn%5B12%5D=7&pn%5B13%5D=5&pn%5B14%5D=3&pn%5B15%5D=2&col=oa&sort=desc&hl=en-US&offset={}".format(
@@ -131,26 +133,38 @@ class RatingCrawler():
         # )[0]
 
         # 名字
-        name = player.xpath("//div[contains(@class,'player')]//div[@class='info']/h1/text()")[0]
+        name = player.xpath(
+            "//div[contains(@class,'player')]//div[@class='info']/h1/text()"
+        )[0]
         # 国籍
-        nation = player.xpath("//div[contains(@class,'player')]//div[@class='info']/div/a/@title")[0]
+        nation = player.xpath(
+            "//div[contains(@class,'player')]//div[@class='info']/div/a/@title"
+        )[0]
         # 位置
-        position = player.xpath("//div[contains(@class,'player')]//div[@class='info']//div/span[1]/text()")[0]
+        position = player.xpath(
+            "//div[contains(@class,'player')]//div[@class='info']//div/span[1]/text()"
+        )[0]
         # 信息字段
-        info_str = player.xpath("//div[contains(@class,'player')]//div[@class='info']//div/text()[last()]")[0]
+        info_str = player.xpath(
+            "//div[contains(@class,'player')]//div[@class='info']//div/text()[last()]"
+        )[0]
         # 年龄
         age = int(re.search(r"(\d+)y.o.", info_str).group(1))
         # 生日
         birth = re.search(r"[(](.*?)[)]", info_str).group(1)
         # 身高
         height = re.search(r"(\d+'\d+)", info_str).group(1)
+        height = int(
+            float(height.split("'")[0]) * 2.54 * 12 +
+            float(height.split("'")[0]) * 2.54)
         # 体重
-        weight = re.search(r"(\d+)lbs", info_str).group(1)
-
-        # 综合能力字段
-        overall_str = player.xpath(
-            "//*[@id='list']/script[2]/text()"
+        weight = int(float(re.search(r"(\d+)lbs", info_str).group(1)) * 0.454)
+        # 惯用脚
+        strong_feet = player.xpath(
+            "//div[@class='card']/h5[text()='Profile']/../ul/li/label[text()='Preferred Foot']/../text()"
         )[0]
+        # 综合能力字段
+        overall_str = player.xpath("//*[@id='list']/script[2]/text()")[0]
         pace = int(re.search('POINT_PAC=(\d+)', overall_str).group(1))
         # 射门
         shooting = int(re.search('POINT_SHO=(\d+)', overall_str).group(1))
@@ -163,12 +177,6 @@ class RatingCrawler():
         # 力量
         physical = int(re.search('POINT_PHY=(\d+)', overall_str).group(1))
 
-        one_piece.append(pace)
-        one_piece.append(shooting)
-        one_piece.append(passing)
-        one_piece.append(dribbling)
-        one_piece.append(defense)
-        one_piece.append(physical)
         one_piece.append(name)
         one_piece.append(nation)
         one_piece.append(position)
@@ -176,6 +184,12 @@ class RatingCrawler():
         one_piece.append(birth)
         one_piece.append(height)
         one_piece.append(weight)
+        one_piece.append(pace)
+        one_piece.append(shooting)
+        one_piece.append(passing)
+        one_piece.append(dribbling)
+        one_piece.append(defense)
+        one_piece.append(physical)
 
         print(one_piece)
         return one_piece
@@ -183,7 +197,7 @@ class RatingCrawler():
         #     return []
 
     def get_player_infos(self, url_list: list) -> list:
-        """TODO
+        """
         整合所有球员信息成复合列表
 
         :param url_list: 球员详细页url列表
@@ -199,7 +213,7 @@ class RatingCrawler():
         return info_list
 
     def switch2df(self, player_list: list) -> pd.DataFrame:
-        """TODO
+        """
         将球员信息复合列表转换成DataFrame格式
 
         :param player_list: 球员信息复合列表
@@ -209,7 +223,7 @@ class RatingCrawler():
         return df
 
     def save_to_path(self, df):
-        """TODO
+        """
         保存球员信息表
 
         :param df:球员信息表
@@ -225,7 +239,7 @@ class RatingCrawler():
         """TODO
         集成功能函数
         """
-        player_url_list = self.get_whole_player_url(208, 135)
+        player_url_list = self.get_whole_player_url(2)
         info_list = self.get_player_infos(player_url_list)
         df = self.switch2df(info_list)
         self.save_to_path(df)
