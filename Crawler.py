@@ -12,7 +12,7 @@ class RatingCrawler():
     def __init__(self, path=''):
         self.column = [
             'Name', 'Nation', 'Position', 'Age', 'Birth', 'Height', 'Weight',
-            'Rating', 'PACE', 'SHOOTING', 'PASSING', 'DRIBBLING', 'DEFENCE',
+            'Strong feet', 'Release clause', 'PACE', 'SHOOTING', 'PASSING', 'DRIBBLING', 'DEFENCE',
             'PHYSICAL'
         ]
 
@@ -53,28 +53,40 @@ class RatingCrawler():
         else:
             return None
 
-    def
+    def get_feature(self, xpath_obj, selector: str) -> str:
+        """
+        通过xpath语法获取特征字段
 
-    def null_manage(self, feature: str) -> int:
-        '''
-        判断并处理空数据，最后转化为整型数
-
-        :param feature: 文本
-        :return: 整型数
-        '''
+        :param xpath_obj: xpath对象
+        :param selector: xpath语法字符串
+        :return: 字符串型字段
+        """
+        feature = xpath_obj.xpath(selector)
         if feature:
-            return int(feature[0])
+            feature = feature[0]
         else:
-            return np.nan
+            feature = np.nan
+        return feature
 
-    def delete_nonwords(self, text: str) -> int:
+    def wage_manege(self, text: str) -> int:
         """
-        去除文本中的非字符
+        处理金额数据
 
-        :param text: 文本
-        :return: 去除空格、换行符后的文本
+        :param text: 金额文本
+        :return: 以k为单位的金额
         """
-        text = re.sub('\s', '', text)  # 去除非数字部分
+        text = re.sub('€', '', text)  # 去除欧元单位
+        try:
+            if text[-1].isdigit():
+                text = float(text[:-1])/1000
+            elif text[-1] == 'K':
+                text = float(text[:-1])
+            elif text[-1] == 'M':
+                text = float(text[:-1])*1000
+            else:
+                text = np.nan
+        except:
+            text = np.nan
         return text
 
     def get_player_url(self, offset: str) -> list:
@@ -122,79 +134,73 @@ class RatingCrawler():
         :param url: 球员详细页url
         :return: 球员信息列表
         """
-        # try:
         # 构建xpath对象
         player = self.switch2xpath(self.get_url_text(url))
         one_piece = []
+        try:
+            # 头像地址
+            # photo = player.xpath(
+            #     "//div[contains(@class,'player')]/img/@data-src"
+            # )[0]
 
-        # 头像地址
-        # photo = player.xpath(
-        #     "//div[contains(@class,'player')]/img/@data-src"
-        # )[0]
+            # 名字
+            name = self.get_feature(player, "//div[contains(@class,'player')]//div[@class='info']/h1/text()")
+            # 国籍
+            nation = self.get_feature(player, "//div[contains(@class,'player')]//div[@class='info']/div/a/@title")
+            # 位置
+            position = self.get_feature(player, "//div[contains(@class,'player')]//div[@class='info']//div/span[1]/text()")
+            # 信息字段
+            info_str = self.get_feature(player, "//div[contains(@class,'player')]//div[@class='info']//div/text()[last()]")
+            # 年龄
+            age = int(re.search(r"(\d+)y.o.", info_str).group(1))
+            # 生日
+            birth = re.search(r"[(](.*?)[)]", info_str).group(1)
+            # 身高
+            height = re.search(r"(\d+'\d+)", info_str).group(1)
+            height = int(
+                float(height.split("'")[0]) * 2.54 * 12 +
+                float(height.split("'")[1]) * 2.54)
+            # 体重
+            weight = int(float(re.search(r"(\d+)lbs", info_str).group(1)) * 0.454)
+            # 惯用脚
+            strong_feet = self.get_feature(player, "//div[@class='card']/h5[text()='Profile']/../ul/li/label[text()='Preferred Foot']/../text()")
+            release_clause = self.get_feature(player, " //div[@class='card']/h5[text()='Profile']/../ul/li/label[text()='Release Clause']/../span/text()")
+            release_clause = self.wage_manege(release_clause)
+            # 综合能力字段
+            overall_str = self.get_feature(player, "//*[@id='list']/script[2]/text()")
+            # 速度
+            pace = int(re.search('POINT_PAC=(\d+)', overall_str).group(1))
+            # 射门
+            shooting = int(re.search('POINT_SHO=(\d+)', overall_str).group(1))
+            # 传球
+            passing = int(re.search('POINT_PAS=(\d+)', overall_str).group(1))
+            # 盘带
+            dribbling = int(re.search('POINT_DRI=(\d+)', overall_str).group(1))
+            # 防守
+            defense = int(re.search('POINT_DEF=(\d+)', overall_str).group(1))
+            # 力量
+            physical = int(re.search('POINT_PHY=(\d+)', overall_str).group(1))
 
-        # 名字
-        name = player.xpath(
-            "//div[contains(@class,'player')]//div[@class='info']/h1/text()"
-        )[0]
-        # 国籍
-        nation = player.xpath(
-            "//div[contains(@class,'player')]//div[@class='info']/div/a/@title"
-        )[0]
-        # 位置
-        position = player.xpath(
-            "//div[contains(@class,'player')]//div[@class='info']//div/span[1]/text()"
-        )[0]
-        # 信息字段
-        info_str = player.xpath(
-            "//div[contains(@class,'player')]//div[@class='info']//div/text()[last()]"
-        )[0]
-        # 年龄
-        age = int(re.search(r"(\d+)y.o.", info_str).group(1))
-        # 生日
-        birth = re.search(r"[(](.*?)[)]", info_str).group(1)
-        # 身高
-        height = re.search(r"(\d+'\d+)", info_str).group(1)
-        height = int(
-            float(height.split("'")[0]) * 2.54 * 12 +
-            float(height.split("'")[0]) * 2.54)
-        # 体重
-        weight = int(float(re.search(r"(\d+)lbs", info_str).group(1)) * 0.454)
-        # 惯用脚
-        strong_feet = player.xpath(
-            "//div[@class='card']/h5[text()='Profile']/../ul/li/label[text()='Preferred Foot']/../text()"
-        )[0]
-        # 综合能力字段
-        overall_str = player.xpath("//*[@id='list']/script[2]/text()")[0]
-        pace = int(re.search('POINT_PAC=(\d+)', overall_str).group(1))
-        # 射门
-        shooting = int(re.search('POINT_SHO=(\d+)', overall_str).group(1))
-        # 传球
-        passing = int(re.search('POINT_PAS=(\d+)', overall_str).group(1))
-        # 盘带
-        dribbling = int(re.search('POINT_DRI=(\d+)', overall_str).group(1))
-        # 防守
-        defense = int(re.search('POINT_DEF=(\d+)', overall_str).group(1))
-        # 力量
-        physical = int(re.search('POINT_PHY=(\d+)', overall_str).group(1))
+            one_piece.append(name)
+            one_piece.append(nation)
+            one_piece.append(position)
+            one_piece.append(age)
+            one_piece.append(birth)
+            one_piece.append(height)
+            one_piece.append(weight)
+            one_piece.append(strong_feet)
+            one_piece.append(release_clause)
+            one_piece.append(pace)
+            one_piece.append(shooting)
+            one_piece.append(passing)
+            one_piece.append(dribbling)
+            one_piece.append(defense)
+            one_piece.append(physical)
 
-        one_piece.append(name)
-        one_piece.append(nation)
-        one_piece.append(position)
-        one_piece.append(age)
-        one_piece.append(birth)
-        one_piece.append(height)
-        one_piece.append(weight)
-        one_piece.append(pace)
-        one_piece.append(shooting)
-        one_piece.append(passing)
-        one_piece.append(dribbling)
-        one_piece.append(defense)
-        one_piece.append(physical)
-
-        print(one_piece)
-        return one_piece
-        # except:
-        #     return []
+            print(one_piece)
+            return one_piece
+        except:
+            return []
 
     def get_player_infos(self, url_list: list) -> list:
         """
@@ -205,8 +211,9 @@ class RatingCrawler():
         """
         info_list = []
         for url in url_list:
-            one_piece = self.parse_player_info(url)
             print('正在爬取第{}条球员信息'.format(url_list.index(url) + 1))
+            one_piece = self.parse_player_info(url)
+
             if one_piece:
                 info_list.append(one_piece)
         print('爬取完成！')
@@ -235,11 +242,12 @@ class RatingCrawler():
                   encoding="utf-8-sig")
         print('已保存至' + self.path + '\\players_info.csv')
 
-    def start(self):
-        """TODO
-        集成功能函数
+    def start(self, pages: int):
         """
-        player_url_list = self.get_whole_player_url(2)
+        集成功能函数
+        :param pages: 爬取页数
+        """
+        player_url_list = self.get_whole_player_url(int(pages))
         info_list = self.get_player_infos(player_url_list)
         df = self.switch2df(info_list)
         self.save_to_path(df)
