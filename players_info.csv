@@ -1,61 +1,31 @@
-﻿Name,Nation,Position,Age,Birth,Height,Weight,Strong feet,Release clause,PACE,SHOOTING,PASSING,DRIBBLING,DEFENCE,PHYSICAL
-Lionel Andrés Messi Cuccittini,Argentina,RW,33,"Jun 24, 1987",170,72,Left,212200.0,85,92,91,95,38,65
-Robert Lewandowski,Poland,ST,31,"Aug 21, 1988",185,81,Right,205400.0,78,92,79,85,44,82
-Cristiano Ronaldo dos Santos Aveiro,Portugal,ST,35,"Feb 5, 1985",187,83,Right,104000.0,89,93,81,89,35,77
-Kevin De Bruyne,Belgium,CM,29,"Jun 28, 1991",180,69,Right,235900.0,76,86,93,88,64,78
-Neymar da Silva Santos Júnior,Brazil,LW,28,"Feb 5, 1992",175,68,Right,244200.0,91,85,86,94,36,58
-Kylian Mbappé Lottin,France,ST,21,"Dec 20, 1998",177,73,Right,357100.0,96,87,78,91,39,76
-Mohamed Salah Ghaly,Egypt,RW,28,"Jun 15, 1992",175,71,Left,222900.0,93,86,81,90,45,75
-Virgil van Dijk,Netherlands,CB,28,"Jul 8, 1991",193,92,Right,217500.0,73,60,71,71,91,85
-Joshua Kimmich,Germany,CDM,25,"Feb 8, 1995",177,74,Right,189800.0,71,73,86,84,83,80
-Sadio Mané,Senegal,LW,28,"Apr 10, 1992",175,69,Right,192400.0,94,84,79,91,44,77
-Harry Kane,England,ST,26,"Jul 28, 1993",187,88,Right,242900.0,68,91,82,81,51,83
-Carlos Henrique Venancio Casimiro,Brazil,CDM,28,"Feb 23, 1992",185,83,Right,185500.0,65,73,76,72,86,90
-손흥민 孙兴慜,Korea Republic,LM,27,"Jul 8, 1992",182,78,Right,209000.0,88,88,82,87,43,70
-Karim Benzema,France,CF,32,"Dec 19, 1987",185,81,Right,171200.0,74,85,81,86,40,76
-Sergio Ramos García,Spain,CB,34,"Mar 30, 1986",182,82,Right,68700.0,71,70,76,73,88,85
-N'Golo Kanté,France,CDM,29,"Mar 29, 1991",167,69,Right,148200.0,77,66,76,81,86,82
-Bruno Miguel Borges Fernandes,Portugal,CAM,25,"Sep 8, 1994",177,69,Right,239000.0,77,86,89,86,70,78
-Raheem Shaquille Sterling,England,LW,25,"Dec 8, 1994",170,69,Right,209800.0,92,80,79,89,45,70
-Kalidou Koulibaly,Senegal,CB,29,"Jun 20, 1991",187,88,Right,130100.0,75,28,55,68,89,86
-Toni Kroos,Germany,CM,30,"Jan 4, 1990",182,76,Right,179400.0,54,81,91,81,71,68
-Sergio Leonel Agüero del Castillo,Argentina,ST,32,"Jun 2, 1988",172,69,Right,136900.0,77,90,77,88,33,71
-Erling Braut Haaland,Norway,ST,19,"Jul 21, 2000",193,88,Left,232800.0,87,90,64,79,45,86
-Andrew Robertson,Scotland,LB,26,"Mar 11, 1994",177,64,Left,164600.0,82,62,81,81,81,76
-Paulo Bruno Exequiel Dybala,Argentina,CF,26,"Nov 15, 1993",177,74,Left,163900.0,85,82,84,92,43,63
-Fábio Henrique Tavares,Brazil,CDM,26,"Oct 23, 1993",187,78,Right,170400.0,69,69,79,77,86,83
-Jamie Vardy,England,ST,33,"Jan 11, 1987",177,74,Right,96900.0,86,85,68,80,56,75
-Ciro Immobile,Italy,ST,30,"Feb 20, 1990",185,84,Right,132600.0,84,88,67,83,39,77
-Thomas Müller,Germany,CAM,30,"Sep 13, 1989",185,76,Right,127100.0,68,84,83,79,56,71
-Ángel Fabián Di María Hernández,Argentina,RW,32,"Feb 14, 1988",180,69,Left,116600.0,83,81,85,88,48,68
-Eden Hazard,Belgium,LW,29,"Jan 7, 1991",175,74,Right,159900.0,87,82,83,92,35,64
-Mats Hummels,Germany,CB,31,"Dec 16, 1988",190,96,Right,92700.0,57,58,77,72,90,77
-Luka Modrić,Croatia,CM,34,"Sep 9, 1985",172,66,Right,74800.0,73,76,89,88,72,66
-Luis Alberto Suárez Díaz,Uruguay,ST,33,"Jan 24, 1987",182,83,Right,104600.0,71,90,82,83,51,83
-Jadon Sancho,England,RM,20,"Mar 25, 2000",180,76,Right,200500.0,83,75,82,90,37,64
-Trent Alexander-Arnold,England,RB,21,"Oct 7, 1998",180,69,Right,187700.0,78,66,87,80,80,71
-Frenkie de Jong,Netherlands,CM,23,"May 12, 1997",180,74,Right,216800.0,80,66,84,87,77,77
-Bernardo Mota Veiga de Carvalho e Silva,Portugal,CAM,25,"Aug 10, 1994",172,64,Left,155900.0,81,77,83,91,54,67
-Kingsley Coman,France,LM,24,"Jun 13, 1996",180,76,Right,160400.0,93,76,79,88,30,61
-Aymeric Laporte,France,CB,26,"May 27, 1994",190,84,Left,152100.0,63,50,72,68,87,80
-Leon Goretzka,Germany,CM,25,"Feb 6, 1995",187,82,Right,154400.0,80,80,82,83,80,86
-Marcos Aoás Corrêa,Brazil,CB,26,"May 14, 1994",182,74,Right,160700.0,72,41,73,70,87,78
-Serge Gnabry,Germany,RM,24,"Jul 14, 1995",175,77,Right,151800.0,83,85,80,86,43,70
-Daniel Carvajal Ramos,Spain,RB,28,"Jan 11, 1992",172,73,Right,126100.0,80,54,78,80,82,80
-Marco Verratti,Italy,CM,27,"Nov 5, 1992",165,59,Right,133200.0,64,60,85,90,79,67
-Paul Pogba,France,CM,27,"Mar 15, 1993",190,83,Right,136800.0,73,81,86,86,65,84
-Antoine Griezmann,France,ST,29,"Mar 21, 1991",175,73,Left,139400.0,79,83,84,87,57,72
-Romelu Lukaku Menama,Belgium,ST,27,"May 13, 1993",190,93,Left,141100.0,81,84,74,76,38,84
-Sergio Busquets i Burgos,Spain,CDM,31,"Jul 16, 1988",187,76,Right,97400.0,42,62,78,79,82,77
-Jordi Alba Ramos,Spain,LB,31,"Mar 21, 1989",170,68,Left,101500.0,86,69,81,83,77,71
-Pierre-Emerick Aubameyang,Gabon,ST,31,"Jun 18, 1989",187,79,Right,109300.0,90,85,75,80,37,69
-Jordan Brian Henderson,England,CDM,30,"Jun 17, 1990",182,79,Right,105500.0,67,74,84,79,81,82
-David Josué Jiménez Silva,Spain,CAM,34,"Jan 8, 1986",172,67,Left,67200.0,64,74,88,88,52,55
-Gerard Piqué Bernabéu,Spain,CB,33,"Feb 2, 1987",193,84,Right,66600.0,57,61,71,67,86,80
-Alejandro Darío Gómez,Argentina,CAM,32,"Feb 15, 1988",167,68,Right,113400.0,90,80,84,88,39,55
-Giorgio Chiellini,Italy,CB,35,"Aug 14, 1984",187,84,Left,29700.0,66,46,58,60,89,79
-Matthijs de Ligt,Netherlands,CB,20,"Aug 12, 1999",187,88,Right,183200.0,72,59,66,69,85,84
-Milan Škriniar,Slovakia,CB,25,"Feb 11, 1995",187,79,Right,106500.0,69,41,59,66,87,81
-Rodrigo Hernández Cascante,Spain,CDM,24,"Jun 22, 1996",190,82,Right,128000.0,65,70,77,77,82,79
-Marcus Rashford,England,LM,22,"Oct 31, 1997",185,69,Right,181700.0,91,85,80,86,43,78
-Sergej Milinković-Savić,Serbia,CM,25,"Feb 27, 1995",190,76,Right,126000.0,69,79,80,83,79,85
+﻿Name,Nation,Club,Position,Age,Birth,Height,Weight,Jersey number,Strong feet,Value,Wage,Release clause,Rating,Potential,PACE,SHOOTING,PASSING,DRIBBLING,DEFENCE,PHYSICAL
+Lionel Andrés Messi Cuccittini,Argentina,FC Barcelona,RW,33,"Jun 24, 1987",170,72,10,Left,103500.0,560.0,212200.0,93,93,85,92,91,95,38,65
+Robert Lewandowski,Poland,FC Bayern München,ST,31,"Aug 21, 1988",185,81,9,Right,124500.0,270.0,205400.0,92,92,78,92,79,85,44,82
+Cristiano Ronaldo dos Santos Aveiro,Portugal,Juventus,ST,35,"Feb 5, 1985",187,83,7,Right,63000.0,220.0,104000.0,92,92,89,93,81,89,35,77
+Kevin De Bruyne,Belgium,Manchester City,CM,29,"Jun 28, 1991",180,69,17,Right,127500.0,370.0,235900.0,91,91,76,86,93,88,64,78
+Neymar da Silva Santos Júnior,Brazil,Paris Saint-Germain,LW,28,"Feb 5, 1992",175,68,10,Right,132000.0,270.0,244200.0,91,91,91,85,86,94,36,58
+Kylian Mbappé Lottin,France,Paris Saint-Germain,ST,21,"Dec 20, 1998",177,73,7,Right,185500.0,160.0,357100.0,90,95,96,87,78,91,39,76
+Mohamed Salah Ghaly,Egypt,Liverpool,RW,28,"Jun 15, 1992",175,71,11,Left,120500.0,250.0,222900.0,90,90,93,86,81,90,45,75
+Virgil van Dijk,Netherlands,Liverpool,CB,28,"Jul 8, 1991",193,92,4,Right,113000.0,210.0,217500.0,90,91,73,60,71,71,91,85
+Joshua Kimmich,Germany,FC Bayern München,CDM,25,"Feb 8, 1995",177,74,6,Right,110000.0,150.0,189800.0,89,90,71,73,86,84,83,80
+Sadio Mané,Senegal,Liverpool,LW,28,"Apr 10, 1992",175,69,10,Right,104000.0,240.0,192400.0,89,89,94,84,79,91,44,77
+Harry Kane,England,Tottenham Hotspur,ST,26,"Jul 28, 1993",187,88,10,Right,123000.0,230.0,242900.0,89,90,68,91,82,81,51,83
+Carlos Henrique Venancio Casimiro,Brazil,Real Madrid,CDM,28,"Feb 23, 1992",185,83,14,Right,90500.0,310.0,185500.0,89,89,65,73,76,72,86,90
+손흥민 孙兴慜,Korea Republic,Tottenham Hotspur,LM,27,"Jul 8, 1992",182,78,7,Right,110000.0,210.0,209000.0,89,89,88,88,82,87,43,70
+Karim Benzema,France,Real Madrid,CF,32,"Dec 19, 1987",185,81,9,Right,83500.0,350.0,171200.0,89,89,74,85,81,86,40,76
+Sergio Ramos García,Spain,Real Madrid,CB,34,"Mar 30, 1986",182,82,4,Right,33500.0,300.0,68700.0,89,89,71,70,76,73,88,85
+N'Golo Kanté,France,Chelsea,CDM,29,"Mar 29, 1991",167,69,7,Right,78000.0,190.0,148200.0,88,88,77,66,76,81,86,82
+Bruno Miguel Borges Fernandes,Portugal,Manchester United,CAM,25,"Sep 8, 1994",177,69,18,Right,121000.0,240.0,239000.0,88,91,77,86,89,86,70,78
+Raheem Shaquille Sterling,England,Manchester City,LW,25,"Dec 8, 1994",170,69,7,Right,109000.0,270.0,209800.0,88,89,92,80,79,89,45,70
+Kalidou Koulibaly,Senegal,Napoli,CB,29,"Jun 20, 1991",187,88,26,Right,76500.0,140.0,130100.0,88,88,75,28,55,68,89,86
+Toni Kroos,Germany,Real Madrid,CM,30,"Jan 4, 1990",182,76,8,Right,87500.0,310.0,179400.0,88,88,54,81,91,81,71,68
+Sergio Leonel Agüero del Castillo,Argentina,Manchester City,ST,32,"Jun 2, 1988",172,69,10,Right,74000.0,290.0,136900.0,88,88,77,90,77,88,33,71
+Erling Braut Haaland,Norway,Borussia Dortmund,ST,19,"Jul 21, 2000",193,88,9,Left,122500.0,72.0,232800.0,87,93,87,90,64,79,45,86
+Andrew Robertson,Scotland,Liverpool,LB,26,"Mar 11, 1994",177,64,26,Left,85500.0,155.0,164600.0,87,88,82,62,81,81,81,76
+Paulo Bruno Exequiel Dybala,Argentina,Juventus,CF,26,"Nov 15, 1993",177,74,10,Left,95000.0,160.0,163900.0,87,88,85,82,84,92,43,63
+Fábio Henrique Tavares,Brazil,Liverpool,CDM,26,"Oct 23, 1993",187,78,3,Right,88500.0,155.0,170400.0,87,89,69,69,79,77,86,83
+Jamie Vardy,England,Leicester City,ST,33,"Jan 11, 1987",177,74,9,Right,51000.0,170.0,96900.0,87,87,86,85,68,80,56,75
+Ciro Immobile,Italy,Lazio,ST,30,"Feb 20, 1990",185,84,17,Right,78000.0,125.0,132600.0,87,87,84,88,67,83,39,77
+Thomas Müller,Germany,FC Bayern München,CAM,30,"Sep 13, 1989",185,76,25,Right,77000.0,140.0,127100.0,87,87,68,84,83,79,56,71
+Ángel Fabián Di María Hernández,Argentina,Paris Saint-Germain,RW,32,"Feb 14, 1988",180,69,11,Left,63000.0,160.0,116600.0,87,87,83,81,85,88,48,68
+Eden Hazard,Belgium,Real Madrid,LW,29,"Jan 7, 1991",175,74,7,Right,78000.0,290.0,159900.0,87,87,87,82,83,92,35,64

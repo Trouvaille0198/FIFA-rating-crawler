@@ -11,9 +11,10 @@ import time
 class RatingCrawler():
     def __init__(self, path=''):
         self.column = [
-            'Name', 'Nation', 'Position', 'Age', 'Birth', 'Height', 'Weight',
-            'Strong feet', 'Release clause', 'PACE', 'SHOOTING', 'PASSING', 'DRIBBLING', 'DEFENCE',
-            'PHYSICAL'
+            'Name', 'Nation', 'Club', 'Position', 'Age', 'Birth', 'Height',
+            'Weight', 'Jersey number', 'Strong feet', 'Value', 'Wage',
+            'Release clause', 'Rating', 'Potential', 'PACE', 'SHOOTING',
+            'PASSING', 'DRIBBLING', 'DEFENCE', 'PHYSICAL'
         ]
 
         if path != '':
@@ -53,7 +54,7 @@ class RatingCrawler():
         else:
             return None
 
-    def get_feature(self, xpath_obj, selector: str) -> str:
+    def get_feature(self, xpath_obj, selector: str, is_int=False) -> str:
         """
         通过xpath语法获取特征字段
 
@@ -62,10 +63,19 @@ class RatingCrawler():
         :return: 字符串型字段
         """
         feature = xpath_obj.xpath(selector)
-        if feature:
-            feature = feature[0]
+        if is_int:
+            if feature:
+                try:
+                    feature = int(feature)
+                except:
+                    feature = np.nan
+            else:
+                feature = np.nan
         else:
-            feature = np.nan
+            if feature:
+                feature = feature[0]
+            else:
+                feature = np.nan
         return feature
 
     def wage_manege(self, text: str) -> int:
@@ -78,11 +88,11 @@ class RatingCrawler():
         text = re.sub('€', '', text)  # 去除欧元单位
         try:
             if text[-1].isdigit():
-                text = float(text[:-1])/1000
+                text = float(text[:-1]) / 1000
             elif text[-1] == 'K':
                 text = float(text[:-1])
             elif text[-1] == 'M':
-                text = float(text[:-1])*1000
+                text = float(text[:-1]) * 1000
             else:
                 text = np.nan
         except:
@@ -125,6 +135,7 @@ class RatingCrawler():
             url = "https://sofifa.com/players?type=all&pn%5B0%5D=27&pn%5B1%5D=25&pn%5B2%5D=23&pn%5B3%5D=22&pn%5B4%5D=21&pn%5B5%5D=20&pn%5B6%5D=18&pn%5B7%5D=16&pn%5B8%5D=14&pn%5B9%5D=12&pn%5B10%5D=10&pn%5B11%5D=8&pn%5B12%5D=7&pn%5B13%5D=5&pn%5B14%5D=3&pn%5B15%5D=2&col=oa&sort=desc&hl=en-US&offset={}".format(
                 str(i))
             url_list.extend(self.get_player_url(str(i)))
+        print('\n')
         return url_list
 
     def parse_player_info(self, url: str) -> list:
@@ -144,13 +155,31 @@ class RatingCrawler():
             # )[0]
 
             # 名字
-            name = self.get_feature(player, "//div[contains(@class,'player')]//div[@class='info']/h1/text()")
+            name = self.get_feature(
+                player,
+                "//div[contains(@class,'player')]//div[@class='info']/h1/text()"
+            )
             # 国籍
-            nation = self.get_feature(player, "//div[contains(@class,'player')]//div[@class='info']/div/a/@title")
+            nation = self.get_feature(
+                player,
+                "//div[contains(@class,'player')]//div[@class='info']/div/a/@title"
+            )
+            # 俱乐部
+            club = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//h5//a/text()"
+            )
             # 位置
-            position = self.get_feature(player, "//div[contains(@class,'player')]//div[@class='info']//div/span[1]/text()")
+            position = self.get_feature(
+                player,
+                "//div[contains(@class,'player')]//div[@class='info']//div/span[1]/text()"
+            )
+
             # 信息字段
-            info_str = self.get_feature(player, "//div[contains(@class,'player')]//div[@class='info']//div/text()[last()]")
+            info_str = self.get_feature(
+                player,
+                "//div[contains(@class,'player')]//div[@class='info']//div/text()[last()]"
+            )
             # 年龄
             age = int(re.search(r"(\d+)y.o.", info_str).group(1))
             # 生日
@@ -161,13 +190,42 @@ class RatingCrawler():
                 float(height.split("'")[0]) * 2.54 * 12 +
                 float(height.split("'")[1]) * 2.54)
             # 体重
-            weight = int(float(re.search(r"(\d+)lbs", info_str).group(1)) * 0.454)
+            weight = int(
+                float(re.search(r"(\d+)lbs", info_str).group(1)) * 0.454)
+            # 俱乐部球衣号码
+            jersey_number = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//li/label[text()='Jersey Number']/../text()"
+            )
             # 惯用脚
-            strong_feet = self.get_feature(player, "//div[@class='card']/h5[text()='Profile']/../ul/li/label[text()='Preferred Foot']/../text()")
-            release_clause = self.get_feature(player, " //div[@class='card']/h5[text()='Profile']/../ul/li/label[text()='Release Clause']/../span/text()")
+            strong_feet = self.get_feature(
+                player,
+                "//div[@class='card']/h5[text()='Profile']/../ul/li/label[text()='Preferred Foot']/../text()"
+            )
+            release_clause = self.get_feature(
+                player,
+                " //div[@class='card']/h5[text()='Profile']/../ul/li/label[text()='Release Clause']/../span/text()"
+            )
             release_clause = self.wage_manege(release_clause)
+            # 综合能力
+            rating = self.get_feature(
+                player, "//section//div[@class='columns']/div[1]//span/text()",
+                True)
+            # 潜力
+            potential = self.get_feature(
+                player, "//section//div[@class='columns']/div[2]//span/text()",
+                True)
+            # 身价
+            value = self.get_feature(
+                player, "//section//div[@class='columns']/div[3]//div/text()")
+            value = self.wage_manege(value)
+            # 周薪
+            wage = self.get_feature(
+                player, "//section//div[@class='columns']/div[4]//div/text()")
+            wage = self.wage_manege(wage)
             # 综合能力字段
-            overall_str = self.get_feature(player, "//*[@id='list']/script[2]/text()")
+            overall_str = self.get_feature(player,
+                                           "//*[@id='list']/script[2]/text()")
             # 速度
             pace = int(re.search('POINT_PAC=(\d+)', overall_str).group(1))
             # 射门
@@ -181,23 +239,103 @@ class RatingCrawler():
             # 力量
             physical = int(re.search('POINT_PHY=(\d+)', overall_str).group(1))
 
+            # 传中
+            crossing = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Attacking']/../ul/li[1]/span/text()",
+                True)
+            # 射术
+            finishing = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Attacking']/../ul/li[2]/span/text()",
+                True)
+            # 头球精度
+            heading_accuracy = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Attacking']/../ul/li[3]/span/text()",
+                True)
+            # 短传
+            short_passing = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Attacking']/../ul/li[4]/span/text()",
+                True)
+            # 凌空
+            volleys = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Attacking']/../ul/li[5]/span/text()",
+                True)
+
+            # 盘带
+            dribbling_skill = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[1]/span/text()",
+                True)
+            # 弧线
+            curve = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[1]/span/text()",
+                True)
+            # 任意球精度
+            fk_accuracy = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[1]/span/text()",
+                True)
+            # 长传
+            long_passing = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[1]/span/text()",
+                True)
+            # 控球
+            ball_control = self.get_feature(
+                player,
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[1]/span/text()",
+                True)
             one_piece.append(name)
             one_piece.append(nation)
+            one_piece.append(club)
             one_piece.append(position)
             one_piece.append(age)
             one_piece.append(birth)
             one_piece.append(height)
             one_piece.append(weight)
+            one_piece.append(jersey_number)
             one_piece.append(strong_feet)
+            one_piece.append(value)
+            one_piece.append(wage)
             one_piece.append(release_clause)
+            one_piece.append(rating)
+            one_piece.append(potential)
             one_piece.append(pace)
             one_piece.append(shooting)
             one_piece.append(passing)
             one_piece.append(dribbling)
             one_piece.append(defense)
             one_piece.append(physical)
+            # 添加具体能力项
+            one_piece.append(crossing)
+            one_piece.append(head_accuracy)
+            one_piece.append(short_passing)
+            one_piece.append(volleys)
+            one_piece.append(dribbling_skill)
+            one_piece.append(curve)
+            one_piece.append(fk_accuracy)
+            one_piece.append(long_passing)
+            one_piece.append(ball_control)
+            one_piece.append(acceleration)
+            one_piece.append(sprint_speed)
+            one_piece.append(agility)
+            one_piece.append(reactions)
+            one_piece.append(balance)
+            one_piece.append(aggression)
+            one_piece.append(interceptions)
+            one_piece.append(positioning)
+            one_piece.append(vision)
+            one_piece.append(penalties)
+            one_piece.append(composure)
+            one_piece.append(defensive_awareness)
+            one_piece.append(standing_tackle)
+            one_piece.append(sliding_tackle)
 
-            print(one_piece)
             return one_piece
         except:
             return []
@@ -210,13 +348,20 @@ class RatingCrawler():
         :return: 球员信息复合列表
         """
         info_list = []
+        error_count = 0
         for url in url_list:
             print('正在爬取第{}条球员信息'.format(url_list.index(url) + 1))
             one_piece = self.parse_player_info(url)
 
             if one_piece:
+                print("第{}条: ".format(url_list.index(url) + 1), one_piece,
+                      '\n')
                 info_list.append(one_piece)
-        print('爬取完成！')
+            else:
+                print("第{}条爬取失败!\n".format(url_list.index(url) + 1))
+                error_count += 1
+        print('爬取完成!\n爬取成功{}条\n爬取失败{}条'.format(
+            len(url_list) - error_count, error_count))
         return info_list
 
     def switch2df(self, player_list: list) -> pd.DataFrame:
