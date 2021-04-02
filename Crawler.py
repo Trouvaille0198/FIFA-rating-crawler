@@ -81,15 +81,15 @@ class RatingCrawler():
                 feature = np.nan
         return feature
 
-    def wage_manege(self, text: str) -> int:
+    def wage_manage(self, text: str) -> int:
         """
         处理金额数据
 
         :param text: 金额文本
         :return: 以k为单位的金额
         """
-        text = re.sub('€', '', text)  # 去除欧元单位
         try:
+            text = re.sub('€', '', text)  # 去除欧元单位
             if text[-1].isdigit():
                 text = float(text[:-1]) / 1000
             elif text[-1] == 'K':
@@ -213,7 +213,7 @@ class RatingCrawler():
                 player,
                 " //div[@class='card']/h5[text()='Profile']/../ul/li/label[text()='Release Clause']/../span/text()"
             )
-            release_clause = self.wage_manege(release_clause)
+            release_clause = self.wage_manage(release_clause)
             # 综合能力
             rating = self.get_feature(
                 player, "//section//div[@class='columns']/div[1]//span/text()",
@@ -225,11 +225,11 @@ class RatingCrawler():
             # 身价
             value = self.get_feature(
                 player, "//section//div[@class='columns']/div[3]//div/text()")
-            value = self.wage_manege(value)
+            value = self.wage_manage(value)
             # 周薪
             wage = self.get_feature(
                 player, "//section//div[@class='columns']/div[4]//div/text()")
-            wage = self.wage_manege(wage)
+            wage = self.wage_manage(wage)
             # 综合能力字段
             overall_str = self.get_feature(player,
                                            "//*[@id='list']/script[2]/text()")

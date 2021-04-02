@@ -1,4 +1,4 @@
 from Crawler import RatingCrawler
 import numpy as np
 Crawler = RatingCrawler()
-Crawler.start(1)
+Crawler.start(60)
