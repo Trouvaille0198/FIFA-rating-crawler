@@ -14,8 +14,11 @@ class RatingCrawler():
             'Name', 'Nation', 'Club', 'Position', 'Age', 'Birth', 'Height',
             'Weight', 'Jersey number', 'Strong feet', 'Value', 'Wage',
             'Release clause', 'Rating', 'Potential', 'PACE', 'SHOOTING',
-            'PASSING', 'DRIBBLING', 'DEFENCE', 'PHYSICAL'
-        ]
+            'PASSING', 'DRIBBLING', 'DEFENCE', 'PHYSICAL', 'crossing', 'finishing', 'heading accuracy',
+            'short passing', 'volleys', 'dribbling skill', 'curve', 'fk accuracy', 'long passing',
+            'ball control', 'acceleration', 'sprint speed', 'agility', 'reactions', 'balance', 'shot power',
+            'jumping', 'stamina', 'strength', 'long shots', 'aggression', 'interceptions', 'positioning', 'vision',
+            'penalties', 'composure', 'defensive_awareness', 'standing_tackle', 'sliding_tackle']
 
         if path != '':
             self.path = path
@@ -66,7 +69,7 @@ class RatingCrawler():
         if is_int:
             if feature:
                 try:
-                    feature = int(feature)
+                    feature = int(feature[0])
                 except:
                     feature = np.nan
             else:
@@ -114,7 +117,7 @@ class RatingCrawler():
             url_list_completed = []
             # 补全url
             for url in url_list:
-                url = r'https://sofifa.com' + url + r'?hl=en-US'
+                url = r'https://sofifa.com' + url + r'?hl=en-US&attr=classic'
                 url_list_completed.append(url)
             return url_list_completed
         except:
@@ -184,6 +187,10 @@ class RatingCrawler():
             age = int(re.search(r"(\d+)y.o.", info_str).group(1))
             # 生日
             birth = re.search(r"[(](.*?)[)]", info_str).group(1)
+            try:
+                birth = time.strftime(r"%Y-%m-%d", time.strptime(birth, r"%b %d, %Y"))
+            except:
+                birth = np.nan
             # 身高
             height = re.search(r"(\d+'\d+)", info_str).group(1)
             height = int(
@@ -273,23 +280,66 @@ class RatingCrawler():
             # 弧线
             curve = self.get_feature(
                 player,
-                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[1]/span/text()",
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[2]/span/text()",
                 True)
             # 任意球精度
             fk_accuracy = self.get_feature(
                 player,
-                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[1]/span/text()",
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[3]/span/text()",
                 True)
             # 长传
             long_passing = self.get_feature(
                 player,
-                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[1]/span/text()",
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[4]/span/text()",
                 True)
             # 控球
             ball_control = self.get_feature(
                 player,
-                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[1]/span/text()",
+                "//div[@class='column col-3']//div[@class='card']//h5[text()='Skill']/../ul/li[5]/span/text()",
                 True)
+
+            # 加速
+            acceleration = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Movement']/../ul/li[1]/span/text()", True)
+            # 最快速度
+            sprint_speed = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Movement']/../ul/li[2]/span/text()", True)
+            # 敏捷
+            agility = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Movement']/../ul/li[3]/span/text()", True)
+            # 反应
+            reactions = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Movement']/../ul/li[4]/span/text()", True)
+            # 平衡
+            balance = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Movement']/../ul/li[5]/span/text()", True)
+
+            # 射门力量
+            shot_power = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Power']/../ul/li[1]/span/text()", True)
+            # 弹跳
+            jumping = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Power']/../ul/li[2]/span/text()", True)
+            # 体能
+            stamina = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Power']/../ul/li[3]/span/text()", True)
+            # 强壮
+            strength = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Power']/../ul/li[4]/span/text()", True)
+            # 远射
+            long_shots = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Power']/../ul/li[5]/span/text()", True)
+
+            # 侵略性
+            aggression = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Mentality']/../ul/li[1]/span/text()", True)
+            # 拦截意识
+            interceptions = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Mentality']/../ul/li[2]/span/text()", True)
+            # 跑位
+            positioning = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Mentality']/../ul/li[3]/span/text()", True)
+            # 视野
+            vision = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Mentality']/../ul/li[4]/span/text()", True)
+            # 点球
+            penalties = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Mentality']/../ul/li[5]/span/text()", True)
+            # 沉着
+            composure = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Mentality']/../ul/li[6]/span/text()", True)
+
+            # 防守意识
+            defensive_awareness = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Defending']/../ul/li[1]/span/text()", True)
+            # 抢断
+            standing_tackle = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Defending']/../ul/li[2]/span/text()", True)
+            # 铲球
+            sliding_tackle = self.get_feature(player, "//div[@class='column col-3']//div[@class='card']//h5[text()='Defending']/../ul/li[3]/span/text()", True)
+
             one_piece.append(name)
             one_piece.append(nation)
             one_piece.append(club)
@@ -313,7 +363,8 @@ class RatingCrawler():
             one_piece.append(physical)
             # 添加具体能力项
             one_piece.append(crossing)
-            one_piece.append(head_accuracy)
+            one_piece.append(finishing)
+            one_piece.append(heading_accuracy)
             one_piece.append(short_passing)
             one_piece.append(volleys)
             one_piece.append(dribbling_skill)
@@ -326,6 +377,11 @@ class RatingCrawler():
             one_piece.append(agility)
             one_piece.append(reactions)
             one_piece.append(balance)
+            one_piece.append(shot_power)
+            one_piece.append(jumping)
+            one_piece.append(stamina)
+            one_piece.append(strength)
+            one_piece.append(long_shots)
             one_piece.append(aggression)
             one_piece.append(interceptions)
             one_piece.append(positioning)
