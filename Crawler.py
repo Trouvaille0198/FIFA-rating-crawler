@@ -142,16 +142,16 @@ class RatingCrawler():
         return url_list
 
     def parse_player_info(self, url: str) -> list:
-        """TODO
+        """
         分析并获取单个球员信息, 在get_player_infos中进行调用
 
         :param url: 球员详细页url
         :return: 球员信息列表
         """
         # 构建xpath对象
-        player = self.switch2xpath(self.get_url_text(url))
-        one_piece = []
         try:
+            player = self.switch2xpath(self.get_url_text(url))
+            one_piece = []
             # 头像地址
             # photo = player.xpath(
             #     "//div[contains(@class,'player')]/img/@data-src"
