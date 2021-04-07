@@ -1,3 +1,4 @@
 # FIFA-rating-crawler
 
-尝试在 sofifa 网站上爬取数据
+完成在Futhead 及 sofifa 网站上的爬取工作
+
