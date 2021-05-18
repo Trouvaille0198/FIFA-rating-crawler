@@ -1,7 +1,7 @@
 # FIFA-rating-crawler
 FIFA球员数据爬取及分析
 
-github项目地址：
+github项目地址：https://github.com/Trouvaille0198/FIFA-rating-crawler
 
 ## 一、简述
 《FIFA》是美国艺电公司（EA）推出的足球动作系列游戏。每年，来自游戏公司的数据调查人员（球探）都会对现实世界的真实球员进行考察与评估，为其各项能力进行打分评级，构筑了一个庞大精准的写实游戏数据库。
@@ -102,6 +102,8 @@ self.column = [
 
 爬虫入口，集成一次爬虫的完整过程
 
+最后爬取的数据以 csv 格式存储，去除重复项后，共计 16741 条球员完整数据
+
 #### 3.2.2 数据分析模块
 
 ##### 1）数据清洗与分析
@@ -193,3 +195,59 @@ def get_feature(self, xpath_obj, selector: str, is_int=False) -> str:
 ### 4.2 机器学习部分
 
 项目所有机器学习、特征工程算法均使用 `sklearn` 库中的封装模型。
+
+以 knn 分类为例
+
+首先筛选出五个位置的球员信息，从中分离出特征字段组 x 与标签组 y 
+
+```python
+data_test = data.query("位置=='中锋' or 位置=='边锋' or 位置=='中场' or 位置=='中后卫' or 位置=='边后卫'")
+x = data_test.drop(['位置','Position'],axis=1)
+y = data_test['位置'].to_list()
+```
+
+将数据集划分成测试集与验证集
+
+```python
+x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=82)
+```
+
+随后，为了避免字段间数据数量级差异带来的负面影响，使用标准化对数据进行特征工程
+
+```python
+transfer_std = StandardScaler()
+x_train_std = transfer_std.fit_transform(x_train)
+x_test_std = transfer_std.transform(x_test)
+```
+
+正式开始训练。声明一个 knn 算法模型，选用网格搜索与十折交叉验证提高精度。
+
+```python
+# KNN
+estimator_knn = KNeighborsClassifier()
+# 调优
+param_dict = {"n_neighbors": [i for i in range(1,20)]}
+estimator_knn = GridSearchCV(
+    estimator_knn, param_grid=param_dict, cv=10)  # 10折
+```
+
+训练模型，得到预测值 `y_pred`
+
+```python
+estimator_knn.fit(x_train_std, y_train)
+y_pred = estimator_knn.predict(x_test_std)
+```
+
+查看准确率
+
+```python
+print("准确率为：\n", estimator_knn.score(x_test_std, y_test))
+
+# 准确率为：
+# 0.8257488479262672
+```
+
+
+
+
+
