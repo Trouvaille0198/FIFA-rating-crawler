@@ -1,5 +1,5 @@
 # FIFA-rating-crawler
-FIFA球员数据爬取及分析
+FIFA 球员数据爬取及分析
 
 github项目地址：https://github.com/Trouvaille0198/FIFA-rating-crawler
 
