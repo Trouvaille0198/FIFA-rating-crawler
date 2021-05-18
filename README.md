@@ -50,10 +50,16 @@ FIFA-rating-crawler
 │       players_info_classified.csv		// 球员筛选数据
 │       pred_fig.png					// 聚类后的两两特征图
 │       real_fig.png					// 部分字段的两两特征图
+│ 
+├───sofifa_crawler 						// sofifa网站数据爬取
+│       Crawler.py						// 爬虫类
+│       main.py							// 爬虫启动程序
 │
-└───sofifa_crawler 						// 数据爬取
-        Crawler.py						// 爬虫类
-        main.py							// 爬虫启动程序
+└───futhead_crawler                     // futhead网站数据爬取
+		Crawler.py						// 爬虫类
+		MultipleCrawler.py              // 多个球员爬取模块
+		SingleCrawler.py				// 单个球员爬取模块
+		ToCSV.py						// 数据保存模块
 
 ```
 
