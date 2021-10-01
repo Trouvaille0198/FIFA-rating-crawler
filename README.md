@@ -72,15 +72,15 @@ sofifa 网站的球员信息封装在球员详细页中
 
 url 样例：https://sofifa.com/player/158023/lionel-messi/210040/
 
-![image-20210518085935156](http://image.trouvaille0198.top/image-20210518085935156.png)
+![image-20210518085935156](http://markdown-1303167219.cos.ap-shanghai.myqcloud.com/image-20210518085935156.png)
 
-![image-20210518085923747](http://image.trouvaille0198.top/image-20210518085923747.png)
+![image-20210518085923747](http://markdown-1303167219.cos.ap-shanghai.myqcloud.com/image-20210518085923747.png)
 
 球员详细页的入口则在网站上分页展现
 
 url 样例：https://sofifa.com/?col=oa&sort=desc
 
-![image-20210518085835975](http://image.trouvaille0198.top/image-20210518085835975.png)因此，爬虫的主要思路是：分页爬取所有的球员详细页，再从详细页中爬取到每个球员的具体数据
+![image-20210518085835975](http://markdown-1303167219.cos.ap-shanghai.myqcloud.com/image-20210518085835975.png)因此，爬虫的主要思路是：分页爬取所有的球员详细页，再从详细页中爬取到每个球员的具体数据
 
 根据 sofifa 网站网页的 DOM 结构，项目设计了爬虫类 Crawler。下面简要介绍一些具有重要功能的类方法。
 
@@ -132,7 +132,7 @@ self.column = [
 
 项目设置训练簇数为 3，来匹配实际中 ”中锋、中场、中后卫“ 这三大位置，训练效果良好，轮廓系数为 0.356，准确率可达 86.8%。
 
-![pred_fig](http://image.trouvaille0198.top/pred_fig.png)
+![pred_fig](http://markdown-1303167219.cos.ap-shanghai.myqcloud.com/pred_fig.png)
 
 ## 四、核心实现
 
@@ -146,19 +146,19 @@ self.column = [
 
 例如，欲爬取视野 `Vision` 字段：
 
-<img src="http://image.trouvaille0198.top/image-20210518111837690.png" alt="image-20210518111837690" style="zoom:50%;" />
+<img src="http://markdown-1303167219.cos.ap-shanghai.myqcloud.com/image-20210518111837690.png" alt="image-20210518111837690" style="zoom:50%;" />
 
 首先找到包装精神 `MENTALITY` 属性的 `div` 标签：
 
-<img src="http://image.trouvaille0198.top/image-20210518111738620.png" alt="image-20210518111738620" style="zoom:50%;" />
+<img src="http://markdown-1303167219.cos.ap-shanghai.myqcloud.com/image-20210518111738620.png" alt="image-20210518111738620" style="zoom:50%;" />
 
 找到内部的列表标签 `ul`：
 
-<img src="http://image.trouvaille0198.top/image-20210518111558100.png" alt="image-20210518111558100" style="zoom:50%;" />
+<img src="http://markdown-1303167219.cos.ap-shanghai.myqcloud.com/image-20210518111558100.png" alt="image-20210518111558100" style="zoom:50%;" />
 
 最后找到目标，是一个列表项标签 `li`
 
-<img src="http://image.trouvaille0198.top/image-20210518111634333.png" alt="image-20210518111634333" style="zoom:50%;" />
+<img src="http://markdown-1303167219.cos.ap-shanghai.myqcloud.com/image-20210518111634333.png" alt="image-20210518111634333" style="zoom:50%;" />
 
 找到目标后，构建 xpath 语法
 
